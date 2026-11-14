@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="ru">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Planetum — За пределами земли</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          montserrat: ['Montserrat', 'sans-serif'],
+          inter: ['Inter', 'sans-serif'],
+        },
+        colors: {
+          cosmic: {
+            950: '#04060d',
+            900: '#070913',
+            850: '#0a0d1c',
+            800: '#0d1122',
+            700: '#141a33',
+            600: '#1c2447',
+          },
+          amberAccent: {
+            300: '#f5e4c4',
+            400: '#edd9b4',
+            500: '#d4af37',
+            600: '#b89028',
+          }
+        }
+      }
+    }
+  };
+</script>
+<style data-purpose="base-layout">
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #070913;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+  }
+</style>
+<style data-purpose="visual-enhancements">
+  .space-background {
+    background: radial-gradient(circle at 75% 25%, #181d33 0%, #0d1021 35%, #06070d 85%);
+  }
+
+  .hero-title {
+    font-weight: 800;
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    text-shadow: 0 14px 30px rgba(0, 0, 0, 0.65), 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+
+  .glass-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  }
+
+  .glass-card-subtle {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  .nav-tab-active {
+    background: linear-gradient(135deg, rgba(28, 54, 63, 0.8) 0%, rgba(18, 38, 42, 0.7) 100%);
+    border: 1px solid rgba(79, 149, 157, 0.35);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn-explore {
+    background: linear-gradient(90deg, rgba(27, 34, 57, 0.85) 0%, rgba(35, 45, 72, 0.75) 45%, rgba(162, 137, 98, 0.7) 85%, rgba(199, 172, 126, 0.85) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.25);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-explore:hover {
+    transform: translateY(-2px) scale(1.015);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.55), 0 0 20px rgba(205, 175, 125, 0.3);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .btn-explore:active {
+    transform: translateY(1px) scale(0.99);
+  }
+
+  @keyframes floatPlanet {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-7px) rotate(0.4deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+  }
+
+  .saturn-container {
+    animation: floatPlanet 9s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .planet-card-glow {
+    transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .planet-card-glow:hover {
+    transform: translateY(-6px);
+    border-color: rgba(237, 217, 180, 0.38);
+    box-shadow: 0 22px 45px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(212, 175, 55, 0.15);
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 9999px;
+    height: 6px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #edd9b4;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(237, 217, 180, 0.8);
+    border: 2px solid #070913;
+  }
+
+  #toast {
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+  }
+</style>
+</head>
+<body class="relative space-background min-h-screen antialiased text-white selection:bg-[#edd9b4]/30 selection:text-white">
+
+<canvas class="fixed inset-0 z-0 pointer-events-none opacity-60 w-full h-full" id="cosmic-dust"></canvas>
+
+<!-- Toast Notification -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 pointer-events-none flex items-center gap-3 bg-[#0d1326]/95 border border-[#edd9b4]/40 px-5 py-3.5 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.6)] backdrop-blur-xl max-w-md" id="toast">
+  <span class="w-2.5 h-2.5 rounded-full bg-[#edd9b4] animate-ping shrink-0"></span>
+  <span class="text-sm font-medium font-inter text-[#edd9b4]" id="toast-message">Сигнал отправлен</span>
+</div>
+
+<!-- HERO WRAPPER -->
+<div class="relative min-h-screen flex flex-col justify-between overflow-x-hidden" id="hero">
+  <!-- Saturn SVG Layer -->
+  <div class="saturn-container absolute right-[-8%] top-[2%] w-[840px] xl:w-[940px] 2xl:w-[1020px] aspect-square z-10 flex items-center justify-center pointer-events-none" data-purpose="saturn-graphics">
+    <svg class="w-full h-full drop-shadow-[0_20px_50px_rgba(0,0,0,0.85)]" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="saturnBody" x1="20%" x2="80%" y1="0%" y2="100%">
+          <stop offset="0%" stop-color="#735f43"></stop>
+          <stop offset="12%" stop-color="#cbb58c"></stop>
+          <stop offset="22%" stop-color="#a48c66"></stop>
+          <stop offset="35%" stop-color="#edd9b4"></stop>
+          <stop offset="48%" stop-color="#c9b188"></stop>
+          <stop offset="62%" stop-color="#e3cb9e"></stop>
+          <stop offset="78%" stop-color="#b69e77"></stop>
+          <stop offset="90%" stop-color="#886d49"></stop>
+          <stop offset="100%" stop-color="#4f3f2a"></stop>
+        </linearGradient>
+        <radialGradient cx="38%" cy="32%" id="sphereShadow" r="68%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.32"></stop>
+          <stop offset="45%" stop-color="#000000" stop-opacity="0"></stop>
+          <stop offset="78%" stop-color="#000000" stop-opacity="0.65"></stop>
+          <stop offset="100%" stop-color="#020305" stop-opacity="0.95"></stop>
+        </radialGradient>
+        <linearGradient id="ringTexture" x1="0%" x2="100%" y1="0%" y2="0%">
+          <stop offset="0%" stop-color="#45382b" stop-opacity="0.92"></stop>
+          <stop offset="14%" stop-color="#cbb287" stop-opacity="0.85"></stop>
+          <stop offset="28%" stop-color="#f5e4c4" stop-opacity="0.9"></stop>
+          <stop offset="40%" stop-color="#937c5c" stop-opacity="0.8"></stop>
+          <stop offset="44%" stop-color="#05070e" stop-opacity="0.25"></stop>
+          <stop offset="48%" stop-color="#141724" stop-opacity="0.3"></stop>
+          <stop offset="52%" stop-color="#d9be95" stop-opacity="0.88"></stop>
+          <stop offset="75%" stop-color="#eed5ad" stop-opacity="0.9"></stop>
+          <stop offset="88%" stop-color="#7a6245" stop-opacity="0.7"></stop>
+          <stop offset="100%" stop-color="#36291a" stop-opacity="0"></stop>
+        </linearGradient>
+        <clipPath id="planetClip">
+          <circle cx="500" cy="500" r="235"></circle>
+        </clipPath>
+        <clipPath id="frontRingsClip">
+          <rect height="500" width="1000" x="0" y="500"></rect>
+        </clipPath>
+      </defs>
+      <g transform="rotate(-28.5 500 500)">
+        <g opacity="0.92">
+          <ellipse cx="500" cy="500" fill="none" rx="460" ry="118" stroke="url(#ringTexture)" stroke-width="65"></ellipse>
+          <ellipse cx="500" cy="500" fill="none" opacity="0.95" rx="380" ry="96" stroke="url(#ringTexture)" stroke-width="45"></ellipse>
+          <ellipse cx="500" cy="500" fill="none" opacity="0.45" rx="310" ry="76" stroke="#776248" stroke-width="22"></ellipse>
+        </g>
+        <circle cx="500" cy="500" fill="url(#saturnBody)" r="235"></circle>
+        <circle cx="500" cy="500" fill="url(#sphereShadow)" r="235"></circle>
+        <path clip-path="url(#planetClip)" d="M 268 495 Q 500 565 732 495 Q 500 528 268 495 Z" fill="#030408" opacity="0.65"></path>
+        <g clip-path="url(#frontRingsClip)">
+          <ellipse cx="500" cy="500" fill="none" rx="460" ry="118" stroke="url(#ringTexture)" stroke-width="65"></ellipse>
+          <ellipse cx="500" cy="500" fill="none" opacity="0.9" rx="412" ry="104" stroke="#080a14" stroke-width="4"></ellipse>
+          <ellipse cx="500" cy="500" fill="none" opacity="0.98" rx="380" ry="96" stroke="url(#ringTexture)" stroke-width="45"></ellipse>
+          <ellipse cx="500" cy="500" fill="none" opacity="0.5" rx="310" ry="76" stroke="#68543d" stroke-width="22"></ellipse>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Main Header -->
+  <header class="relative z-30 w-full px-8 md:px-14 lg:px-20 pt-8 pb-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a aria-label="Planetum Главная" class="flex items-center gap-3.5 group cursor-pointer" href="#hero">
+        <div class="relative w-12 h-12 flex items-center justify-center">
+          <span class="absolute inset-0 rounded-full border-[3.5px] border-white opacity-95 group-hover:scale-105 transition-transform duration-300"></span>
+          <span class="w-4 h-4 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]"></span>
+        </div>
+        <span class="font-montserrat font-extrabold text-2xl md:text-[27px] tracking-tight text-white group-hover:text-slate-200 transition-colors">
+          plɑnetum
+        </span>
+      </a>
+
+      <div class="flex flex-col items-end">
+        <nav class="flex items-center gap-3 sm:gap-6 md:gap-8 pb-3.5 text-sm md:text-base font-semibold tracking-wide">
+          <a class="nav-link-item nav-tab-active text-white px-7 py-2 rounded-full font-bold transition-all duration-300 text-center" data-target="hero" href="#hero" id="nav-btn-home">
+            главная
+          </a>
+          <a class="nav-link-item text-white/80 hover:text-white px-3 py-1.5 rounded-full transition-all duration-300 font-medium text-center" data-target="discoveries" href="#discoveries" id="nav-btn-discoveries">
+            открытия
+          </a>
+          <a class="nav-link-item text-white/80 hover:text-white px-3 py-1.5 rounded-full transition-all duration-300 font-medium text-center" data-target="about" href="#about" id="nav-btn-about">
+            о проекте
+          </a>
+        </nav>
+        <div class="w-[330px] sm:w-[380px] md:w-[440px] h-[1.5px] bg-white/70 shadow-[0_0_4px_rgba(255,255,255,0.4)]"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Main Section -->
+  <main class="relative z-20 flex-grow flex items-center px-8 md:px-14 lg:px-20 max-w-7xl mx-auto w-full py-8 lg:py-4">
+    <div class="w-full max-w-2xl flex flex-col justify-center">
+      <p class="font-inter text-xs md:text-sm tracking-[0.22em] text-[#98a6c5] uppercase font-semibold mb-4 md:mb-5">
+        ИССЛЕДУЙ ТО, ЧТО СКРЫВАЕТСЯ ЗА ГОРИЗОНТОМ
+      </p>
+      <h1 class="hero-title text-[64px] sm:text-[88px] md:text-[108px] lg:text-[124px] text-white font-black mb-8 select-none">
+        <div>За пределами</div>
+        <div>Земли</div>
+      </h1>
+      <article class="glass-card rounded-[22px] p-6 sm:p-7 md:p-8 max-w-[530px] mb-8" data-purpose="planet-description-card">
+        <p class="font-inter text-sm sm:text-base leading-relaxed text-[#c7d2e9]/90 font-light tracking-wide text-justify sm:text-left">
+          Открой для себя планеты, исследуй далёкие миры и узнай больше о Вселенной, частью которой мы являемся. Архивация планетарной динамики, спектроскопии и орбитальных баз данных.
+        </p>
+      </article>
+      <div>
+        <a class="btn-explore group relative inline-flex items-center gap-3.5 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full cursor-pointer" href="#discoveries" id="cta-explore">
+          <svg class="w-6 h-6 text-white transform group-hover:translate-x-1.5 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <span class="font-montserrat font-bold text-base sm:text-lg text-white tracking-normal lowercase">
+            исследовать вселенную
+          </span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <div class="relative z-20 flex flex-col items-center pb-6">
+    <a class="group flex flex-col items-center gap-2 text-white/40 hover:text-white/90 transition-colors" href="#telemetry">
+      <span class="text-[11px] uppercase tracking-[0.25em] font-inter">Погрузиться глубже</span>
+      <span class="material-symbols-outlined text-lg animate-bounce">expand_more</span>
+    </a>
+  </div>
+</div>
+
+<!-- SECTION A: STATS & TELEMETRY STRIP -->
+<section class="relative z-20 w-full px-8 md:px-14 lg:px-20 py-16 border-t border-b border-white/5 bg-[#080b18]/70 backdrop-blur-md" id="telemetry">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-center justify-between flex-wrap gap-4 mb-10 pb-4 border-b border-white/10">
+      <div class="flex items-center gap-3">
+        <span class="relative flex h-3 w-3">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+        </span>
+        <span class="font-inter text-xs md:text-sm font-medium tracking-wider text-emerald-400 uppercase">
+          Архив обновлен в реальном времени • Спутниковая связь активна
+        </span>
+      </div>
+      <div class="font-inter text-xs text-[#98a6c5] flex items-center gap-2">
+        <span class="material-symbols-outlined text-base text-[#edd9b4]">satellite_alt</span>
+        <span>Телескоп James Webb / Kepler Data Link: <strong class="text-white" id="live-sync-rate">99.8%</strong> Sync</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="glass-card-subtle rounded-2xl p-6 relative overflow-hidden group hover:border-white/20 transition-all">
+        <div class="absolute -right-4 -bottom-4 text-white/[0.03] group-hover:text-white/[0.06] transition-colors pointer-events-none">
+          <span class="material-symbols-outlined text-8xl font-thin">public</span>
+        </div>
+        <p class="text-xs uppercase tracking-[0.2em] font-inter text-[#98a6c5] mb-2">Каталог миров</p>
+        <div class="font-montserrat font-extrabold text-3xl md:text-4xl text-white mb-2 flex items-baseline gap-1">
+          <span>5,600</span><span class="text-[#edd9b4] text-2xl font-light">+</span>
+        </div>
+        <p class="font-inter text-sm text-[#c7d2e9]/80 font-normal">Подтверждённых экзопланет</p>
+      </div>
+
+      <div class="glass-card-subtle rounded-2xl p-6 relative overflow-hidden group hover:border-white/20 transition-all">
+        <div class="absolute -right-4 -bottom-4 text-white/[0.03] group-hover:text-white/[0.06] transition-colors pointer-events-none">
+          <span class="material-symbols-outlined text-8xl font-thin">all_inclusive</span>
+        </div>
+        <p class="text-xs uppercase tracking-[0.2em] font-inter text-[#98a6c5] mb-2">Гравитационные сети</p>
+        <div class="font-montserrat font-extrabold text-3xl md:text-4xl text-white mb-2 flex items-baseline gap-1">
+          <span>4,180</span>
+        </div>
+        <p class="font-inter text-sm text-[#c7d2e9]/80 font-normal">Планетарных систем</p>
+      </div>
+
+      <div class="glass-card-subtle rounded-2xl p-6 relative overflow-hidden group hover:border-white/20 transition-all">
+        <div class="absolute -right-4 -bottom-4 text-white/[0.03] group-hover:text-white/[0.06] transition-colors pointer-events-none">
+          <span class="material-symbols-outlined text-8xl font-thin">graphic_eq</span>
+        </div>
+        <p class="text-xs uppercase tracking-[0.2em] font-inter text-[#98a6c5] mb-2">Анализ состава</p>
+        <div class="font-montserrat font-extrabold text-3xl md:text-4xl text-white mb-2 flex items-baseline gap-1">
+          <span>128</span>
+        </div>
+        <p class="font-inter text-sm text-[#c7d2e9]/80 font-normal">Спектральных архивов</p>
+      </div>
+
+      <div class="glass-card-subtle rounded-2xl p-6 relative overflow-hidden group hover:border-white/20 transition-all">
+        <div class="absolute -right-4 -bottom-4 text-white/[0.03] group-hover:text-white/[0.06] transition-colors pointer-events-none">
+          <span class="material-symbols-outlined text-8xl font-thin">precision_manufacturing</span>
+        </div>
+        <p class="text-xs uppercase tracking-[0.2em] font-inter text-[#98a6c5] mb-2">Надёжность базы</p>
+        <div class="font-montserrat font-extrabold text-3xl md:text-4xl text-white mb-2 flex items-baseline gap-1">
+          <span>99.4</span><span class="text-[#edd9b4] text-2xl font-light">%</span>
+        </div>
+        <p class="font-inter text-sm text-[#c7d2e9]/80 font-normal">Точность орбитальных расчётов</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION B: CATALOG OF EXOPLANETS -->
+<section class="relative z-20 w-full px-8 md:px-14 lg:px-20 py-24" id="discoveries">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold tracking-[0.2em] text-[#edd9b4] uppercase mb-4">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#edd9b4]"></span>
+          АРХИВ ЭКЗОПЛАНЕТ
+        </div>
+        <h2 class="font-montserrat font-black text-3xl md:text-5xl tracking-tight text-white">
+          Исследованные миры
+        </h2>
+        <p class="font-inter text-[#98a6c5] text-base max-w-xl mt-3">
+          Физические параметры, атмосферные спектры и обитаемость обнаруженных объектов глубокого космоса.
+        </p>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="flex flex-wrap items-center gap-2" id="planet-filter-tabs">
+        <button class="filter-tab-btn active px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all bg-white/15 text-white border border-white/20" data-filter="all">
+          Все миры (8)
+        </button>
+        <button class="filter-tab-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all bg-white/5 text-white/60 hover:text-white hover:bg-white/10 border border-white/5" data-filter="gas">
+          Газовые гиганты
+        </button>
+        <button class="filter-tab-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all bg-white/5 text-white/60 hover:text-white hover:bg-white/10 border border-white/5" data-filter="super-earth">
+          Суперземли
+        </button>
+        <button class="filter-tab-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all bg-white/5 text-white/60 hover:text-white hover:bg-white/10 border border-white/5" data-filter="ocean">
+          Планеты-океаны
+        </button>
+        <button class="filter-tab-btn px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all bg-white/5 text-white/60 hover:text-white hover:bg-white/10 border border-white/5" data-filter="lava">
+          Лавовые миры
+        </button>
+      </div>
+    </div>
+
+    <!-- Active Console Filter Banner -->
+    <div class="hidden mb-8 p-4 rounded-2xl bg-[#edd9b4]/10 border border-[#edd9b4]/30 flex flex-wrap items-center justify-between gap-4" id="active-filter-banner">
+      <div class="flex items-center gap-3 text-xs font-inter text-[#edd9b4]">
+        <span class="material-symbols-outlined text-lg">filter_list</span>
+        <span id="active-filter-summary">Применён фильтр консоли спектроскопии</span>
+      </div>
+      <button class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition-colors" onclick="resetAllCatalogFilters()">
+        Показать все миры
+      </button>
+    </div>
+
+    <!-- Planet Cards Grid (Populated dynamically from PLANETS_DB) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="planets-grid"></div>
+
+    <!-- Empty State -->
+    <div class="hidden glass-card rounded-3xl p-12 text-center border border-white/15" id="planets-empty-state">
+      <span class="material-symbols-outlined text-5xl text-[#edd9b4]/70 mb-3">travel_explore</span>
+      <h3 class="font-montserrat font-bold text-xl text-white mb-2">Совпадений в локальном секторе не найдено</h3>
+      <p class="font-inter text-sm text-[#98a6c5] max-w-md mx-auto mb-6">
+        Ни одна из 8 опорных экзопланет каталога не удовлетворяет всем выбранным параметрам спектроскопии одновременно.
+      </p>
+      <button class="btn-explore px-6 py-3 rounded-full font-montserrat font-bold text-xs uppercase tracking-wider text-white" onclick="resetAllCatalogFilters()">
+        Сбросить параметры поиска
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION C: INTERACTIVE SEARCH & FILTERS -->
+<section class="relative z-20 w-full px-8 md:px-14 lg:px-20 py-24 bg-[#060814]/80 border-t border-b border-white/10" id="filters">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold tracking-[0.2em] text-[#edd9b4] uppercase mb-4">
+        <span class="material-symbols-outlined text-sm">tune</span>
+        ТОЧНЫЙ ПОИСК
+      </div>
+      <h2 class="font-montserrat font-black text-3xl md:text-5xl text-white tracking-tight mb-4">
+        Инструмент спектроскопии и фильтрации
+      </h2>
+      <p class="font-inter text-[#98a6c5] text-sm md:text-base font-light">
+        Настройте астрофизические критерии для поиска небесных тел по спектральным характеристикам, температурным режимам и признакам биосигнатур.
+      </p>
+    </div>
+
+    <div class="glass-card rounded-3xl p-6 sm:p-10 border border-white/15">
+      <form id="filter-console-form" onsubmit="event.preventDefault(); applyFilterConsole(true);">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Left Column -->
+          <div class="space-y-6">
+            <div>
+              <label class="block text-xs uppercase tracking-wider font-semibold text-[#cbd5e1] mb-2 font-inter" for="query-input">
+                Поиск по каталогу
+              </label>
+              <div class="relative">
+                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40 text-lg">search</span>
+                <input class="w-full bg-white/5 border border-white/15 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-white/30 focus:border-[#edd9b4] focus:ring-1 focus:ring-[#edd9b4] outline-none font-inter transition-colors" id="query-input" oninput="updateLiveTelemetryPreview()" placeholder="Kepler, TRAPPIST, Proxima, WASP..." type="text">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs uppercase tracking-wider font-semibold text-[#cbd5e1] mb-2 font-inter" for="spectral-class">
+                Спектральный класс звезды
+              </label>
+              <div class="relative">
+                <select class="w-full bg-[#0a0e1c] border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:border-[#edd9b4] focus:ring-1 focus:ring-[#edd9b4] outline-none font-inter cursor-pointer transition-colors" id="spectral-class" onchange="updateLiveTelemetryPreview()">
+                  <option value="ALL">Любой спектральный класс (O, B, A, F, G, K, M)</option>
+                  <option value="G">Класс G — Жёлтые карлики (тип Солнца)</option>
+                  <option value="M">Класс M — Красные карлики (TRAPPIST-1, Проксима)</option>
+                  <option value="K">Класс K — Оранжевые звёзды (высокая стабильность)</option>
+                  <option value="F">Класс F — Жёлто-белые звёзды</option>
+                  <option value="A">Класс A — Белые звёзды высокой светимости</option>
+                  <option value="B">Класс B/O — Голубые гиганты</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-xs uppercase tracking-wider font-semibold text-[#cbd5e1] font-inter" for="temp-slider">
+                  Макс. температура поверхности
+                </label>
+                <span class="font-mono text-xs px-2.5 py-0.5 rounded-full bg-[#edd9b4]/15 border border-[#edd9b4]/30 text-[#edd9b4] font-semibold" id="temp-badge">
+                  до +2500°C
+                </span>
+              </div>
+              <input class="w-full cursor-pointer" id="temp-slider" max="2500" min="-150" oninput="handleTempSlider(this.value)" step="50" type="range" value="2500">
+              <div class="flex justify-between text-[11px] text-white/40 font-mono mt-1.5">
+                <span>-150°C (Криосфера)</span>
+                <span>+2500°C (Плавление)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle Column -->
+          <div class="space-y-6">
+            <div>
+              <label class="block text-xs uppercase tracking-wider font-semibold text-[#cbd5e1] mb-2.5 font-inter">
+                Метод открытия объекта
+              </label>
+              <div class="space-y-2">
+                <label class="flex items-center gap-3 p-2 rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/15 cursor-pointer transition-colors">
+                  <input checked="" class="text-[#edd9b4] focus:ring-[#edd9b4] bg-transparent border-white/30" name="method" onchange="updateLiveTelemetryPreview()" type="radio" value="all">
+                  <span class="text-xs text-white/90 font-inter">Все методы (Kepler, TESS, HARPS, JWST)</span>
+                </label>
+                <label class="flex items-center gap-3 p-2 rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/15 cursor-pointer transition-colors">
+                  <input class="text-[#edd9b4] focus:ring-[#edd9b4] bg-transparent border-white/30" name="method" onchange="updateLiveTelemetryPreview()" type="radio" value="transit">
+                  <span class="text-xs text-white/90 font-inter">Транзитный метод (Kepler/TESS)</span>
+                </label>
+                <label class="flex items-center gap-3 p-2 rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/15 cursor-pointer transition-colors">
+                  <input class="text-[#edd9b4] focus:ring-[#edd9b4] bg-transparent border-white/30" name="method" onchange="updateLiveTelemetryPreview()" type="radio" value="radial">
+                  <span class="text-xs text-white/90 font-inter">Радиальные скорости (Doppler / HARPS)</span>
+                </label>
+                <label class="flex items-center gap-3 p-2 rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/15 cursor-pointer transition-colors">
+                  <input class="text-[#edd9b4] focus:ring-[#edd9b4] bg-transparent border-white/30" name="method" onchange="updateLiveTelemetryPreview()" type="radio" value="direct">
+                  <span class="text-xs text-white/90 font-inter">Прямое оптическое / ИК наблюдение</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs uppercase tracking-wider font-semibold text-[#cbd5e1] mb-2.5 font-inter">
+                Спектральные маркеры
+              </label>
+              <div class="space-y-2">
+                <label class="flex items-center gap-3 p-2 rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/15 cursor-pointer transition-colors">
+                  <input class="rounded text-[#edd9b4] focus:ring-[#edd9b4] bg-transparent border-white/30" id="chk-water" onchange="updateLiveTelemetryPreview()" type="checkbox">
+                  <span class="text-xs text-white/90 font-inter flex items-center justify-between w-full">
+                    <span>Наличие воды / паров (H₂O)</span>
+                    <span class="text-[10px] text-emerald-400 font-mono">Биомаркер</span>
+                  </span>
+                </label>
+                <label class="flex items-center gap-3 p-2 rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/15 cursor-pointer transition-colors">
+                  <input class="rounded text-[#edd9b4] focus:ring-[#edd9b4] bg-transparent border-white/30" id="chk-magnetic" onchange="updateLiveTelemetryPreview()" type="checkbox">
+                  <span class="text-xs text-white/90 font-inter">Магнитное поле (магнитосфера)</span>
+                </label>
+                <label class="flex items-center gap-3 p-2 rounded-xl bg-white/[0.03] border border-white/5 hover:border-white/15 cursor-pointer transition-colors">
+                  <input class="rounded text-[#edd9b4] focus:ring-[#edd9b4] bg-transparent border-white/30" id="chk-gases" onchange="updateLiveTelemetryPreview()" type="checkbox">
+                  <span class="text-xs text-white/90 font-inter">Атмосферные маркеры (O₂, CH₄, CO₂)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="flex flex-col justify-between bg-black/40 rounded-2xl p-6 border border-white/10">
+            <div>
+              <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+                <span class="text-xs font-mono tracking-wider text-[#98a6c5]">ТЕЛЕМЕТРИЧЕСКАЯ ВЫБОРКА</span>
+                <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
+              </div>
+              <div class="space-y-3 font-mono text-xs text-[#cbd5e1]">
+                <div class="flex justify-between">
+                  <span class="text-white/40">Найдено в каталоге:</span>
+                  <span class="text-[#edd9b4] font-bold text-sm" id="results-count">8 из 8 объектов</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-white/40">Индекс подобия Земле (ESI &gt; 0.7):</span>
+                  <span class="text-emerald-400 font-bold" id="results-esi-count">5 объектов</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-white/40">Средняя погрешность спектра:</span>
+                  <span class="text-white">±0.04%</span>
+                </div>
+              </div>
+
+              <!-- Matched Planet Quick Pills -->
+              <div class="mt-5">
+                <p class="text-[10px] font-mono uppercase tracking-wider text-white/40 mb-2">Подходящие объекты (нажмите для спектра):</p>
+                <div class="flex flex-wrap gap-1.5" id="matched-planet-pills"></div>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 mt-6 pt-4 border-t border-white/10">
+              <button class="btn-explore flex-1 py-3 px-5 rounded-xl font-montserrat font-bold text-xs uppercase tracking-wider text-white flex items-center justify-center gap-2 cursor-pointer" type="submit">
+                <span class="material-symbols-outlined text-base">filter_alt</span>
+                Применить к каталогу
+              </button>
+              <button class="py-3 px-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-inter font-medium text-white/70 hover:text-white transition-colors cursor-pointer" onclick="resetFilters()" type="button">
+                Сбросить
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION D: ABOUT & SCIENTIFIC METHODS -->
+<section class="relative z-20 w-full px-8 md:px-14 lg:px-20 py-28" id="about">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-5 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold tracking-[0.2em] text-[#edd9b4] uppercase">
+          <span class="material-symbols-outlined text-sm">science</span>
+          О ПРОЕКТЕ
+        </div>
+        <h2 class="font-montserrat font-black text-3xl md:text-5xl text-white tracking-tight leading-tight">
+          Научные методы Planetum
+        </h2>
+        <p class="font-inter text-[#c7d2e9]/90 text-sm md:text-base leading-relaxed font-light">
+          Мы объединяем орбитальную телеметрию ведущих обсерваторий Земли и космических аппаратов в общедоступную платформу планетарной спектроскопии и картографии.
+        </p>
+        <div class="pt-4 space-y-3 font-inter text-xs text-[#98a6c5]">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#edd9b4] text-lg">check_circle</span>
+            <span>Кросс-верификация данных телескопов JWST, Hubble и CHEOPS</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#edd9b4] text-lg">check_circle</span>
+            <span>Автоматический расчёт потенциального индекса обитаемости (ESI)</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#edd9b4] text-lg">check_circle</span>
+            <span>Открытый программный интерфейс API для астрофизиков</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 space-y-5">
+        <div class="method-card glass-card-subtle rounded-2xl p-6 md:p-7 border border-white/10 hover:border-[#edd9b4]/40 transition-all group cursor-pointer" onclick="toggleMethodCard(this)">
+          <div class="flex items-start gap-5">
+            <span class="font-mono text-2xl md:text-3xl font-bold text-[#edd9b4]/80 group-hover:text-[#edd9b4] transition-colors">01</span>
+            <div class="space-y-2 flex-grow">
+              <h3 class="font-montserrat font-bold text-lg md:text-xl text-white flex items-center justify-between">
+                <span>Орбитальная спектроскопия</span>
+                <span class="material-symbols-outlined text-white/40 text-xl group-hover:text-white transition-colors">biotech</span>
+              </h3>
+              <p class="font-inter text-xs md:text-sm text-[#cbd5e1] font-light leading-relaxed">
+                Тончайший анализ поглощения света родительской звезды при прохождении сквозь атмосферу экзопланеты. Позволяет с точностью до миллионных долей определить химический состав газов, давление и облачные покровы.
+              </p>
+              <div class="method-extra hidden pt-3 mt-3 border-t border-white/10 text-xs font-mono text-[#edd9b4]/90">
+                Инструменты: JWST NIRSpec (0.6–5.3 мкм), Hubble WFC3 • Разрешение R ≈ 2700
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="method-card glass-card-subtle rounded-2xl p-6 md:p-7 border border-white/10 hover:border-[#edd9b4]/40 transition-all group cursor-pointer" onclick="toggleMethodCard(this)">
+          <div class="flex items-start gap-5">
+            <span class="font-mono text-2xl md:text-3xl font-bold text-[#edd9b4]/80 group-hover:text-[#edd9b4] transition-colors">02</span>
+            <div class="space-y-2 flex-grow">
+              <h3 class="font-montserrat font-bold text-lg md:text-xl text-white flex items-center justify-between">
+                <span>Машинное зрение и нейроклассификация</span>
+                <span class="material-symbols-outlined text-white/40 text-xl group-hover:text-white transition-colors">psychology</span>
+              </h3>
+              <p class="font-inter text-xs md:text-sm text-[#cbd5e1] font-light leading-relaxed">
+                Глубокие свёрточные сети фильтруют звёздные вспышки и инструментальный шум сенсоров космических аппаратов, выявляя периодические микроколебания яркости звёзд при прохождении малых планет.
+              </p>
+              <div class="method-extra hidden pt-3 mt-3 border-t border-white/10 text-xs font-mono text-[#edd9b4]/90">
+                Модель: ExoNet-v4 • Порог ложных срабатываний &lt; 0.015% на кривых блеска TESS
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="method-card glass-card-subtle rounded-2xl p-6 md:p-7 border border-white/10 hover:border-[#edd9b4]/40 transition-all group cursor-pointer" onclick="toggleMethodCard(this)">
+          <div class="flex items-start gap-5">
+            <span class="font-mono text-2xl md:text-3xl font-bold text-[#edd9b4]/80 group-hover:text-[#edd9b4] transition-colors">03</span>
+            <div class="space-y-2 flex-grow">
+              <h3 class="font-montserrat font-bold text-lg md:text-xl text-white flex items-center justify-between">
+                <span>Открытый научный репозиторий</span>
+                <span class="material-symbols-outlined text-white/40 text-xl group-hover:text-white transition-colors">public</span>
+              </h3>
+              <p class="font-inter text-xs md:text-sm text-[#cbd5e1] font-light leading-relaxed">
+                Свободный открытый доступ астрофизикам, университетским лабораториям и астрономам-любителям по всему миру для ускорения открытий биомаркеров и проверки гипотез.
+              </p>
+              <div class="method-extra hidden pt-3 mt-3 border-t border-white/10 text-xs font-mono text-[#edd9b4]/90">
+                Поддержка стандартов IVOA TAP, FITS, VOTable и мгновенного CSV-экспорта
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION E: RESEARCHER REQUEST & SUBSCRIBE -->
+<section class="relative z-20 w-full px-8 md:px-14 lg:px-20 py-24 bg-[#050711]" id="contact">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-semibold tracking-[0.2em] text-[#edd9b4] uppercase mb-4">
+        <span class="material-symbols-outlined text-sm">hub</span>
+        СЕТЬ НАУЧНОГО СОТРУДНИЧЕСТВА
+      </div>
+      <h2 class="font-montserrat font-black text-3xl md:text-5xl text-white tracking-tight mb-4">
+        Присоединиться к сети Planetum
+      </h2>
+      <p class="font-inter text-[#98a6c5] text-sm md:text-base font-light">
+        Запросите доступ к сырым спектрометрическим массивам или подпишитесь на дайджест подтверждённых экзопланет.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div class="lg:col-span-7 glass-card rounded-3xl p-7 md:p-10 border border-white/15">
+        <div class="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
+          <span class="material-symbols-outlined text-[#edd9b4] text-2xl">key</span>
+          <div>
+            <h3 class="font-montserrat font-bold text-lg text-white">Запрос доступа к телеметрическим базам</h3>
+            <p class="font-inter text-xs text-[#98a6c5]">Для исследовательских институтов и обсерваторий</p>
+          </div>
+        </div>
+        <form class="space-y-5" id="research-request-form" onsubmit="event.preventDefault(); submitResearchForm();">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs uppercase tracking-wider font-semibold text-[#cbd5e1] mb-2 font-inter">
+                Имя исследователя *
+              </label>
+              <input class="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:border-[#edd9b4] focus:ring-1 focus:ring-[#edd9b4] outline-none font-inter transition-colors" id="res-name" placeholder="Д-р Алексей Воронов" required="" type="text">
+            </div>
+            <div>
+              <label class="block text-xs uppercase tracking-wider font-semibold text-[#cbd5e1] mb-2 font-inter">
+                Рабочий Email *
+              </label>
+              <input class="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:border-[#edd9b4] focus:ring-1 focus:ring-[#edd9b4] outline-none font-inter transition-colors" id="res-email" placeholder="voronov@astro-inst.org" required="" type="email">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-wider font-semibold text-[#cbd5e1] mb-2 font-inter">
+              Институт / Обсерватория *
+            </label>
+            <select class="w-full bg-[#0a0e1c] border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:border-[#edd9b4] focus:ring-1 focus:ring-[#edd9b4] outline-none font-inter cursor-pointer transition-colors" id="res-org" required="">
+              <option disabled="" selected="" value="">Выберите научную организацию</option>
+              <option value="SAO">Специальная астрофизическая обсерватория (САО РАН)</option>
+              <option value="GAISH">Государственный астрономический институт им. Штернберга</option>
+              <option value="ESO">Европейская южная обсерватория (ESO)</option>
+              <option value="NASA_ADS">NASA Astrophysics Data System Affiliate</option>
+              <option value="INDEP">Независимый сертифицированный исследователь</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-wider font-semibold text-[#cbd5e1] mb-2 font-inter">
+              Цель исследования и запрашиваемые диапазоны данных *
+            </label>
+            <textarea class="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-white/30 focus:border-[#edd9b4] focus:ring-1 focus:ring-[#edd9b4] outline-none font-inter transition-colors resize-none" id="res-goal" placeholder="Укажите объекты интереса, диапазоны длин волн (UV, Оптический, IR) и научные цели анализа..." required="" rows="4"></textarea>
+          </div>
+          <div class="pt-2 flex items-center justify-between flex-wrap gap-4">
+            <span class="text-[11px] font-inter text-white/40">
+              * Заявки рассматриваются научным комитетом в течение 48 часов
+            </span>
+            <button class="btn-explore py-3 px-8 rounded-full font-montserrat font-bold text-xs uppercase tracking-wider text-white shadow-lg cursor-pointer" type="submit">
+              Отправить заявку на доступ
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="lg:col-span-5 space-y-6">
+        <div class="glass-card rounded-3xl p-7 md:p-8 border border-white/15">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="material-symbols-outlined text-[#edd9b4] text-2xl">mark_email_unread</span>
+            <h3 class="font-montserrat font-bold text-lg text-white">Дайджест открытий</h3>
+          </div>
+          <p class="font-inter text-xs text-[#cbd5e1] leading-relaxed mb-6 font-light">
+            Каждую неделю: свежие спектральные карты экзопланет, открытия новых планетных систем и научные препринты в удобном формате.
+          </p>
+          <form class="space-y-3" id="subscribe-form" onsubmit="event.preventDefault(); submitSubscribeForm();">
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40 text-lg">mail</span>
+              <input class="w-full bg-white/5 border border-white/15 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-white/30 focus:border-[#edd9b4] focus:ring-1 focus:ring-[#edd9b4] outline-none font-inter transition-colors" id="sub-email" placeholder="cosmos.explorer@domain.com" required="" type="email">
+            </div>
+            <button class="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-white/15 to-white/25 hover:from-white/25 hover:to-white/35 border border-white/20 font-montserrat font-bold text-xs uppercase tracking-wider text-white transition-all shadow-md cursor-pointer" type="submit">
+              Подписаться
+            </button>
+          </form>
+          <p class="text-[11px] font-inter text-white/40 text-center mt-3">Без спама. Отписка в один клик.</p>
+        </div>
+
+        <div class="glass-card-subtle rounded-2xl p-6 border border-white/10 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#edd9b4] text-2xl">sensors</span>
+            <div>
+              <p class="text-xs font-montserrat font-bold text-white">Прямой радиолинк</p>
+              <p class="text-[11px] font-mono text-emerald-400">Частота: 8.4 GHz (Deep Space Network)</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono font-bold text-white/80 bg-white/10 px-2.5 py-1 rounded-md">
+            DELAY: 1.28s
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION F: FOOTER -->
+<footer class="relative z-20 w-full pt-16 pb-10 bg-[#04060d] border-t border-white/10">
+  <div class="max-w-7xl mx-auto px-8 md:px-14 lg:px-20">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 pb-14 border-b border-white/10">
+      <div class="lg:col-span-2 space-y-4">
+        <a class="flex items-center gap-3.5 group inline-flex cursor-pointer" href="#hero">
+          <div class="relative w-10 h-10 flex items-center justify-center">
+            <span class="absolute inset-0 rounded-full border-[3px] border-white opacity-95 group-hover:scale-105 transition-transform"></span>
+            <span class="w-3.5 h-3.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
+          </div>
+          <span class="font-montserrat font-extrabold text-2xl tracking-tight text-white">
+            plɑnetum
+          </span>
+        </a>
+        <p class="font-inter text-xs text-[#98a6c5] leading-relaxed max-w-sm">
+          Архивация планетарной динамики, спектроскопии и орбитальных баз данных глубокого космоса. Совместный проект астрофизических лабораторий.
+        </p>
+        <div class="pt-2 flex items-center gap-2 font-mono text-xs text-[#edd9b4]">
+          <span class="material-symbols-outlined text-sm">schedule</span>
+          <span>Звёздное время (UTC):</span>
+          <span class="font-bold" id="star-clock">11:57:56 Z</span>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <h4 class="font-montserrat font-bold text-xs uppercase tracking-wider text-white">Исследования</h4>
+        <ul class="space-y-2 text-xs font-inter text-white/60">
+          <li><a class="hover:text-white transition-colors" href="#discoveries" onclick="quickFilterCategory('all')">Каталог экзопланет</a></li>
+          <li><a class="hover:text-white transition-colors" href="#filters">Спектральный анализ</a></li>
+          <li><a class="hover:text-white transition-colors" href="#telemetry">Орбитальная телеметрия</a></li>
+          <li><a class="hover:text-white transition-colors" href="#about">Индекс ESI</a></li>
+        </ul>
+      </div>
+
+      <div class="space-y-3">
+        <h4 class="font-montserrat font-bold text-xs uppercase tracking-wider text-white">Каталоги</h4>
+        <ul class="space-y-2 text-xs font-inter text-white/60">
+          <li><a class="hover:text-white transition-colors" href="#discoveries" onclick="quickSearchCatalog('Kepler')">Архив Кеплера</a></li>
+          <li><a class="hover:text-white transition-colors" href="#discoveries" onclick="quickSearchCatalog('TOI')">Данные TESS</a></li>
+          <li><a class="hover:text-white transition-colors" href="#discoveries" onclick="quickSearchCatalog('TRAPPIST')">Наблюдения JWST</a></li>
+          <li><a class="hover:text-white transition-colors" href="#discoveries" onclick="quickFilterCategory('gas')">Горячие юпитеры</a></li>
+        </ul>
+      </div>
+
+      <div class="space-y-3">
+        <h4 class="font-montserrat font-bold text-xs uppercase tracking-wider text-white">Документация</h4>
+        <ul class="space-y-2 text-xs font-inter text-white/60">
+          <li><a class="hover:text-white transition-colors" href="#contact">Planetum API (v2)</a></li>
+          <li><a class="hover:text-white transition-colors" href="#about">Научные публикации</a></li>
+          <li><a class="hover:text-white transition-colors" href="#contact">Форматы данных FITS</a></li>
+          <li><a class="hover:text-white transition-colors" href="#about">Методология расчёта</a></li>
+        </ul>
+      </div>
+
+      <div class="space-y-3">
+        <h4 class="font-montserrat font-bold text-xs uppercase tracking-wider text-white">Правовая инфо</h4>
+        <ul class="space-y-2 text-xs font-inter text-white/60">
+          <li><a class="hover:text-white transition-colors" href="#about" onclick="showToast('Лицензия: Creative Commons Attribution 4.0 International (CC BY 4.0)')">Лицензия Creative Commons</a></li>
+          <li><a class="hover:text-white transition-colors" href="#contact" onclick="showToast('Все запросы телеметрии шифруются по стандарту TLS 1.3')">Политика конфиденциальности</a></li>
+          <li><a class="hover:text-white transition-colors" href="#about" onclick="showToast('Репозиторий спектрометрических парсеров открыт под MIT')">Открытый код (GitHub)</a></li>
+          <li><a class="hover:text-white transition-colors" href="#contact">Контакты дирекции</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 font-inter text-xs text-white/40">
+      <div class="flex items-center gap-3">
+        <span>Planetum Research © 2026. Вселенная бесконечна.</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="flex items-center gap-1.5 text-emerald-400 font-mono text-[11px]">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          Все обсерватории онлайн
+        </span>
+        <span class="text-white/20">•</span>
+        <span class="font-mono text-white/50 text-[11px]">Координаты: RA 19h 50m / Dec +48°</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL: SPECTRAL ANALYSIS DETAIL POPOVER -->
+<div class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4" id="spectrum-modal">
+  <div class="glass-card max-w-xl w-full rounded-3xl p-7 md:p-8 transform scale-95 transition-transform duration-300 border border-white/20" id="spectrum-container">
+    <div class="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-[#edd9b4] text-2xl">stacked_bar_chart</span>
+        <div>
+          <h3 class="text-xl font-bold font-montserrat text-white" id="modal-planet-name">Kepler-452b</h3>
+          <p class="text-xs font-inter text-[#edd9b4]" id="modal-planet-type">Суперземля • Зона обитаемости</p>
+        </div>
+      </div>
+      <button class="text-white/60 hover:text-white p-1 rounded-full transition-colors cursor-pointer" onclick="closeSpectrumModal()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="mb-6">
+      <div class="flex justify-between text-xs font-mono text-white/50 mb-2">
+        <span>Спектр поглощения (Transmission Spectrum)</span>
+        <span>λ: 0.3μm — 5.0μm</span>
+      </div>
+      <div class="w-full h-12 rounded-xl bg-gradient-to-r from-violet-600 via-cyan-400 via-emerald-400 via-amber-400 to-rose-600 relative overflow-hidden flex items-center justify-around px-3" id="modal-spectrum-bars"></div>
+      <div class="flex justify-between text-[10px] font-mono text-white/40 mt-1">
+        <span>УФ-диапазон</span>
+        <span>Оптический спектр</span>
+        <span>Инфракрасный (JWST)</span>
+      </div>
+    </div>
+
+    <div class="space-y-3 text-xs text-[#cbd5e1] font-inter mb-6">
+      <div class="flex justify-between py-2 border-b border-white/5">
+        <span class="text-white/50">Расстояние от Земли:</span>
+        <span class="font-mono text-white font-semibold" id="modal-dist">1 400 св. лет</span>
+      </div>
+      <div class="flex justify-between py-2 border-b border-white/5">
+        <span class="text-white/50">Эффективная температура:</span>
+        <span class="font-mono text-white font-semibold" id="modal-temp">-8°C</span>
+      </div>
+      <div class="flex justify-between py-2 border-b border-white/5">
+        <span class="text-white/50">Спектральный класс звезды / Метод:</span>
+        <span class="font-mono text-white font-semibold" id="modal-star-method">G2V • Транзитный</span>
+      </div>
+      <div class="flex justify-between py-2 border-b border-white/5 gap-4">
+        <span class="text-white/50 shrink-0">Обнаруженные компоненты атмосферы:</span>
+        <span class="font-mono text-[#edd9b4] text-right font-medium" id="modal-elements">H₂O, CO₂, N₂</span>
+      </div>
+      <div class="flex justify-between py-2">
+        <span class="text-white/50">Индекс подобия Земле (ESI):</span>
+        <span class="font-mono text-emerald-400 font-bold" id="modal-esi">0.83 (Высокий)</span>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-3 pt-2">
+      <button class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition-colors flex items-center gap-1.5 cursor-pointer" onclick="downloadDataset()">
+        <span class="material-symbols-outlined text-sm">download</span>
+        Экспорт CSV / Телеметрия
+      </button>
+      <button class="nav-tab-active px-6 py-2.5 rounded-full text-xs font-bold text-white transition-colors cursor-pointer" onclick="closeSpectrumModal()">
+        Закрыть
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- JAVASCRIPT LOGIC & INTERACTIONS -->
+<script data-purpose="comprehensive-interactivity">
+  // 0. Unified Exoplanet Dataset
+  const PLANETS_DB = [
+    {
+      id: 'kepler-452b',
+      name: 'Kepler-452b',
+      subtitle: 'Земля 2.0',
+      category: 'super-earth',
+      classLabel: 'Суперземля',
+      badge: 'Зона обитаемости',
+      badgeStyle: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+      distance: '1 400 св. лет',
+      tempNum: -8,
+      tempLabel: '-8°C',
+      tempColor: 'text-[#7dd3fc]',
+      stat4Label: 'Масса:',
+      stat4Value: '5.0 M⊕',
+      spectralClass: 'G',
+      starInfo: 'G2V (тип Солнца)',
+      method: 'transit',
+      methodLabel: 'Транзитный (Kepler)',
+      hasWater: true,
+      hasMagnetic: true,
+      hasGases: true,
+      elements: 'Азот, Кислород, пары H₂O, Диоксид углерода',
+      esiNum: 0.83,
+      esiLabel: '0.83 (Высокая)',
+      spectrumLines: [6, 12, 4, 10, 16, 8],
+      visualBg: 'from-[#0a1b24] via-[#102d33] to-[#1d5c58]',
+      visualGlow: 'rgba(125,211,252,0.4)',
+      planetStyle: 'w-28 h-28 rounded-full bg-gradient-to-br from-[#4fa9a0] via-[#216d68] to-[#071d22] shadow-[0_0_30px_rgba(79,169,160,0.5),inset_-8px_-8px_20px_rgba(0,0,0,0.8)]',
+      planetDetail: '<span class="w-20 h-2 bg-white/20 rounded-full blur-[1px] transform -rotate-12"></span>'
+    },
+    {
+      id: 'wasp-12b',
+      name: 'WASP-12b',
+      subtitle: 'Углеродный гигант',
+      category: 'gas',
+      classLabel: 'Горячий юпитер',
+      badge: 'Сверхвысокая радиация',
+      badgeStyle: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+      distance: '870 св. лет',
+      tempNum: 2250,
+      tempLabel: '+2 250°C',
+      tempColor: 'text-rose-400',
+      stat4Label: 'Период орбиты:',
+      stat4Value: '1.09 земных суток',
+      spectralClass: 'F',
+      starInfo: 'F9V (Жёлто-белая)',
+      method: 'transit',
+      methodLabel: 'Транзитный (SuperWASP)',
+      hasWater: false,
+      hasMagnetic: true,
+      hasGases: true,
+      elements: 'Ионизированный углерод, Метан, CO, пары Железа',
+      esiNum: 0.00,
+      esiLabel: '0.00 (Экстремальная среда)',
+      spectrumLines: [14, 6, 18, 5, 12, 15],
+      visualBg: 'from-[#230d07] via-[#3a1a0f] to-[#5a2512]',
+      visualGlow: 'rgba(251,146,60,0.3)',
+      planetStyle: 'w-32 h-24 rounded-[45%] bg-gradient-to-r from-[#d97706] via-[#92400e] to-[#451a03] shadow-[0_0_35px_rgba(245,158,11,0.5),inset_-10px_-6px_22px_rgba(0,0,0,0.85)] transform rotate-12',
+      planetDetail: '<span class="w-24 h-1.5 bg-amber-200/40 rounded-full blur-[0.5px]"></span>'
+    },
+    {
+      id: 'proxima-b',
+      name: 'Proxima Centauri b',
+      subtitle: 'Приливный захват',
+      category: 'super-earth',
+      classLabel: 'Землеподобная',
+      badge: 'Ближайший кандидат',
+      badgeStyle: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+      distance: '4.24 св. лет',
+      tempNum: -39,
+      tempLabel: '-39°C',
+      tempColor: 'text-[#7dd3fc]',
+      stat4Label: 'Освещённость:',
+      stat4Value: '65% земной',
+      spectralClass: 'M',
+      starInfo: 'M5.5Ve (Красный карлик)',
+      method: 'radial',
+      methodLabel: 'Радиальные скорости (HARPS)',
+      hasWater: true,
+      hasMagnetic: false,
+      hasGases: true,
+      elements: 'Азот, CO₂, следы H₂O, озоновый слой под сомнением',
+      esiNum: 0.76,
+      esiLabel: '0.76 (Умеренная)',
+      spectrumLines: [5, 10, 8, 14, 6, 9],
+      visualBg: 'from-[#161226] via-[#1d1b38] to-[#2e2652]',
+      visualGlow: 'rgba(167,139,250,0.3)',
+      planetStyle: 'w-28 h-28 rounded-full bg-gradient-to-br from-[#c084fc] via-[#6b21a8] to-[#1e1035] shadow-[0_0_25px_rgba(168,85,247,0.4),inset_-8px_-8px_18px_rgba(0,0,0,0.9)]',
+      planetDetail: '<div class="w-full h-full rounded-full opacity-30 bg-[radial-gradient(ellipse_at_bottom,rgba(255,255,255,0.7),transparent)]"></div>'
+    },
+    {
+      id: 'toi-849b',
+      name: 'TOI-849b',
+      subtitle: 'Обнажённое ядро',
+      category: 'lava',
+      classLabel: 'Ядро гиганта',
+      badge: 'Плотность свинца',
+      badgeStyle: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+      distance: '730 св. лет',
+      tempNum: 1530,
+      tempLabel: '+1 530°C',
+      tempColor: 'text-amber-300',
+      stat4Label: 'Плотность:',
+      stat4Value: '5.5 г/см³',
+      spectralClass: 'G',
+      starInfo: 'G-класс (Поздний)',
+      method: 'transit',
+      methodLabel: 'Транзитный (TESS)',
+      hasWater: false,
+      hasMagnetic: false,
+      hasGases: false,
+      elements: 'Испарившиеся силикаты, Железо, Магний, без водородной оболочки',
+      esiNum: 0.02,
+      esiLabel: '0.02 (Непригодно)',
+      spectrumLines: [16, 4, 15, 11, 7, 13],
+      visualBg: 'from-[#201015] via-[#33111b] to-[#451220]',
+      visualGlow: 'rgba(244,63,94,0.35)',
+      planetStyle: 'w-28 h-28 rounded-full bg-gradient-to-br from-[#fb7185] via-[#9f1239] to-[#29050d] shadow-[0_0_35px_rgba(244,63,94,0.45),inset_-9px_-9px_20px_rgba(0,0,0,0.9)]',
+      planetDetail: '<span class="w-16 h-1 bg-amber-300/60 rounded-full blur-[1px] transform rotate-45"></span>'
+    },
+    {
+      id: 'kepler-22b',
+      name: 'Kepler-22b',
+      subtitle: 'Глобальный гидромир',
+      category: 'ocean',
+      classLabel: 'Планета-океан',
+      badge: 'Глубокий океан',
+      badgeStyle: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+      distance: '635 св. лет',
+      tempNum: 22,
+      tempLabel: '+22°C',
+      tempColor: 'text-emerald-300',
+      stat4Label: 'Радиус:',
+      stat4Value: '2.4 R⊕',
+      spectralClass: 'G',
+      starInfo: 'G5V (Жёлтый карлик)',
+      method: 'transit',
+      methodLabel: 'Транзитный (Kepler)',
+      hasWater: true,
+      hasMagnetic: true,
+      hasGases: true,
+      elements: 'Плотные пары H₂O, Азот, CO₂, облачный аэрозоль',
+      esiNum: 0.81,
+      esiLabel: '0.81 (Высокая)',
+      spectrumLines: [4, 15, 7, 13, 5, 11],
+      visualBg: 'from-[#061829] via-[#0c2e4e] to-[#134e7a]',
+      visualGlow: 'rgba(56,189,248,0.4)',
+      planetStyle: 'w-28 h-28 rounded-full bg-gradient-to-br from-[#38bdf8] via-[#0284c7] to-[#082f49] shadow-[0_0_32px_rgba(56,189,248,0.5),inset_-8px_-8px_20px_rgba(0,0,0,0.85)]',
+      planetDetail: '<span class="w-24 h-3 bg-white/25 rounded-full blur-[2px] transform rotate-6"></span>'
+    },
+    {
+      id: 'lhs-1140b',
+      name: 'LHS 1140b',
+      subtitle: 'Ледяной океан и глаз',
+      category: 'ocean',
+      classLabel: 'Планета-океан',
+      badge: 'Подтверждена JWST',
+      badgeStyle: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+      distance: '48.8 св. лет',
+      tempNum: -47,
+      tempLabel: '-47°C',
+      tempColor: 'text-[#7dd3fc]',
+      stat4Label: 'Доля воды:',
+      stat4Value: '10–20% массы',
+      spectralClass: 'M',
+      starInfo: 'M4.5V (Красный карлик)',
+      method: 'transit',
+      methodLabel: 'Транзитный + JWST',
+      hasWater: true,
+      hasMagnetic: true,
+      hasGases: true,
+      elements: 'Богатая азотом атмосфера (N₂), H₂O, следы CO₂',
+      esiNum: 0.78,
+      esiLabel: '0.78 (Высокая)',
+      spectrumLines: [7, 11, 5, 15, 9, 6],
+      visualBg: 'from-[#091526] via-[#13294b] to-[#1e3f66]',
+      visualGlow: 'rgba(147,197,253,0.35)',
+      planetStyle: 'w-28 h-28 rounded-full bg-gradient-to-br from-[#bae6fd] via-[#3b82f6] to-[#172554] shadow-[0_0_28px_rgba(96,165,250,0.45),inset_-9px_-9px_20px_rgba(0,0,0,0.85)]',
+      planetDetail: '<span class="w-10 h-10 rounded-full bg-sky-300/30 blur-[2px] -translate-x-3 -translate-y-2"></span>'
+    },
+    {
+      id: 'trappist-1e',
+      name: 'TRAPPIST-1e',
+      subtitle: 'Жемчужина системы 7 планет',
+      category: 'super-earth',
+      classLabel: 'Землеподобная',
+      badge: 'Приоритет JWST',
+      badgeStyle: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+      distance: '40.7 св. лет',
+      tempNum: -22,
+      tempLabel: '-22°C',
+      tempColor: 'text-emerald-300',
+      stat4Label: 'Плотность:',
+      stat4Value: '5.65 г/см³',
+      spectralClass: 'M',
+      starInfo: 'M8V (Ультрахолодный карлик)',
+      method: 'direct',
+      methodLabel: 'ИК-спектроскопия JWST',
+      hasWater: true,
+      hasMagnetic: true,
+      hasGases: true,
+      elements: 'Вторичная атмосфера N₂, O₂, возможен жидкий океан',
+      esiNum: 0.85,
+      esiLabel: '0.85 (Максимальная)',
+      spectrumLines: [5, 13, 6, 12, 8, 10],
+      visualBg: 'from-[#0d1f1d] via-[#153632] to-[#1f4f49]',
+      visualGlow: 'rgba(52,211,153,0.35)',
+      planetStyle: 'w-28 h-28 rounded-full bg-gradient-to-br from-[#6ee7b7] via-[#059669] to-[#064e3b] shadow-[0_0_28px_rgba(16,185,129,0.45),inset_-8px_-8px_20px_rgba(0,0,0,0.85)]',
+      planetDetail: '<span class="w-16 h-1.5 bg-emerald-100/30 rounded-full blur-[1px] transform -rotate-20"></span>'
+    },
+    {
+      id: 'hd-189733b',
+      name: 'HD 189733b',
+      subtitle: 'Лазурный шторм',
+      category: 'gas',
+      classLabel: 'Горячий юпитер',
+      badge: 'Силикатные дожди',
+      badgeStyle: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+      distance: '64.5 св. лет',
+      tempNum: 930,
+      tempLabel: '+930°C',
+      tempColor: 'text-amber-300',
+      stat4Label: 'Скорость ветра:',
+      stat4Value: '8 700 км/ч',
+      spectralClass: 'K',
+      starInfo: 'K2V (Оранжевый карлик)',
+      method: 'radial',
+      methodLabel: 'Радиальные скорости + Транзит',
+      hasWater: true,
+      hasMagnetic: true,
+      hasGases: true,
+      elements: 'Пары H₂O, Метан (CH₄), угарный газ CO, силикатная дымка',
+      esiNum: 0.08,
+      esiLabel: '0.08 (Непригодно)',
+      spectrumLines: [11, 8, 16, 6, 14, 9],
+      visualBg: 'from-[#08122b] via-[#102354] to-[#1d3b8a]',
+      visualGlow: 'rgba(96,165,250,0.4)',
+      planetStyle: 'w-28 h-28 rounded-full bg-gradient-to-br from-[#60a5fa] via-[#1d4ed8] to-[#0f172a] shadow-[0_0_32px_rgba(59,130,246,0.55),inset_-9px_-9px_22px_rgba(0,0,0,0.85)]',
+      planetDetail: '<span class="w-24 h-2 bg-blue-200/30 rounded-full blur-[1px] transform -rotate-6"></span>'
+    }
+  ];
+
+  let activeCategoryTab = 'all';
+  let consoleFilterActive = false;
+  let currentModalPlanet = null;
+
+  // Render Planet Cards
+  function renderPlanetCards(planets) {
+    const grid = document.getElementById('planets-grid');
+    const emptyState = document.getElementById('planets-empty-state');
+    if (!grid) return;
+
+    if (planets.length === 0) {
+      grid.innerHTML = '';
+      emptyState.classList.remove('hidden');
+      return;
+    }
+
+    emptyState.classList.add('hidden');
+    grid.innerHTML = planets.map(p => `
+      <div class="planet-card-glow glass-card rounded-2xl p-6 flex flex-col justify-between" data-category="${p.category}">
+        <div>
+          <div class="relative w-full aspect-square rounded-xl bg-gradient-to-tr ${p.visualBg} flex items-center justify-center overflow-hidden mb-6 border border-white/10 shadow-inner">
+            <div class="absolute inset-0" style="background: radial-gradient(circle at 30% 30%, ${p.visualGlow}, transparent 60%);"></div>
+            <div class="relative ${p.planetStyle} flex items-center justify-center">
+              ${p.planetDetail}
+            </div>
+            <span class="absolute top-3 right-3 text-[10px] font-mono px-2 py-0.5 rounded-full border ${p.badgeStyle}">${p.badge}</span>
+          </div>
+          <p class="font-inter text-xs text-[#edd9b4] font-semibold uppercase tracking-wider">${p.subtitle}</p>
+          <h3 class="font-montserrat font-bold text-xl text-white mb-3">${p.name}</h3>
+          <div class="space-y-2 text-xs font-inter text-[#cbd5e1] mb-6">
+            <div class="flex justify-between py-1 border-b border-white/5">
+              <span class="text-white/50">Класс:</span>
+              <span class="font-semibold text-white">${p.classLabel}</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-white/5">
+              <span class="text-white/50">Расстояние:</span>
+              <span class="font-mono text-white">${p.distance}</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-white/5">
+              <span class="text-white/50">Температура:</span>
+              <span class="font-mono ${p.tempColor}">${p.tempLabel}</span>
+            </div>
+            <div class="flex justify-between py-1">
+              <span class="text-white/50">${p.stat4Label}</span>
+              <span class="font-mono text-white">${p.stat4Value}</span>
+            </div>
+          </div>
+        </div>
+        <button class="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 group cursor-pointer" onclick="openSpectrumModalById('${p.id}')">
+          <span>Анализ спектра</span>
+          <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">query_stats</span>
+        </button>
+      </div>
+    `).join('');
+  }
+
+  // Get Matching Planets from Spectroscopy Console
+  function getConsoleFilteredPlanets() {
+    const query = document.getElementById('query-input').value.trim().toLowerCase();
+    const spectral = document.getElementById('spectral-class').value;
+    const maxTemp = parseInt(document.getElementById('temp-slider').value, 10);
+    const methodEl = document.querySelector('input[name="method"]:checked');
+    const method = methodEl ? methodEl.value : 'all';
+    const reqWater = document.getElementById('chk-water').checked;
+    const reqMagnetic = document.getElementById('chk-magnetic').checked;
+    const reqGases = document.getElementById('chk-gases').checked;
+
+    return PLANETS_DB.filter(p => {
+      if (query && !p.name.toLowerCase().includes(query) && !p.subtitle.toLowerCase().includes(query) && !p.elements.toLowerCase().includes(query)) {
+        return false;
+      }
+      if (spectral !== 'ALL' && p.spectralClass !== spectral) {
+        return false;
+      }
+      if (p.tempNum > maxTemp) {
+        return false;
+      }
+      if (method !== 'all' && p.method !== method) {
+        return false;
+      }
+      if (reqWater && !p.hasWater) return false;
+      if (reqMagnetic && !p.hasMagnetic) return false;
+      if (reqGases && !p.hasGases) return false;
+      return true;
+    });
+  }
+
+  function updateLiveTelemetryPreview() {
+    const matches = getConsoleFilteredPlanets();
+    const esiMatches = matches.filter(p => p.esiNum > 0.7).length;
+
+    document.getElementById('results-count').innerText = `${matches.length} из ${PLANETS_DB.length} объектов`;
+    document.getElementById('results-esi-count').innerText = `${esiMatches} объектов`;
+
+    const pillsContainer = document.getElementById('matched-planet-pills');
+    if (matches.length === 0) {
+      pillsContainer.innerHTML = '<span class="text-[11px] font-inter text-rose-300/80">Нет объектов по заданным критериям</span>';
+    } else {
+      pillsContainer.innerHTML = matches.map(p => `
+        <button type="button" onclick="openSpectrumModalById('${p.id}')" class="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-[#edd9b4]/25 border border-white/15 hover:border-[#edd9b4]/50 text-[11px] font-mono text-white transition-colors cursor-pointer">
+          ${p.name}
+        </button>
+      `).join('');
+    }
+  }
+
+  function handleTempSlider(val) {
+    const num = parseInt(val, 10);
+    const sign = num > 0 ? '+' : '';
+    document.getElementById('temp-badge').innerText = `до ${sign}${num}°C`;
+    updateLiveTelemetryPreview();
+  }
+
+  function applyFilterConsole(scrollToGrid = false) {
+    consoleFilterActive = true;
+    const matches = getConsoleFilteredPlanets();
+    const finalList = activeCategoryTab === 'all'
+      ? matches
+      : matches.filter(p => p.category === activeCategoryTab);
+
+    renderPlanetCards(finalList);
+
+    const banner = document.getElementById('active-filter-banner');
+    const summary = document.getElementById('active-filter-summary');
+    banner.classList.remove('hidden');
+    summary.innerText = `Активен фильтр спектроскопии: отображено ${finalList.length} из ${PLANETS_DB.length} миров`;
+
+    showToast(`Параметры применены: найдено ${finalList.length} объекта`);
+
+    if (scrollToGrid) {
+      document.getElementById('discoveries').scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  function resetFilters() {
+    document.getElementById('filter-console-form').reset();
+    document.getElementById('temp-slider').value = 2500;
+    document.getElementById('temp-badge').innerText = 'до +2500°C';
+    consoleFilterActive = false;
+    document.getElementById('active-filter-banner').classList.add('hidden');
+    updateLiveTelemetryPreview();
+    filterByCategoryTab(activeCategoryTab);
+    showToast('Параметры фильтра сброшены к значениям по умолчанию');
+  }
+
+  function resetAllCatalogFilters() {
+    activeCategoryTab = 'all';
+    document.querySelectorAll('.filter-tab-btn').forEach(b => {
+      const isAll = b.getAttribute('data-filter') === 'all';
+      b.classList.toggle('active', isAll);
+      b.classList.toggle('bg-white/15', isAll);
+      b.classList.toggle('text-white', isAll);
+      b.classList.toggle('border-white/20', isAll);
+      b.classList.toggle('bg-white/5', !isAll);
+      b.classList.toggle('text-white/60', !isAll);
+      b.classList.toggle('border-white/5', !isAll);
+    });
+    resetFilters();
+  }
+
+  function filterByCategoryTab(category) {
+    activeCategoryTab = category;
+    const baseList = consoleFilterActive ? getConsoleFilteredPlanets() : PLANETS_DB;
+    const filtered = category === 'all' ? baseList : baseList.filter(p => p.category === category);
+    renderPlanetCards(filtered);
+  }
+
+  function quickFilterCategory(category) {
+    activeCategoryTab = category;
+    document.querySelectorAll('.filter-tab-btn').forEach(b => {
+      const match = b.getAttribute('data-filter') === category;
+      b.classList.toggle('active', match);
+      b.classList.toggle('bg-white/15', match);
+      b.classList.toggle('text-white', match);
+      b.classList.toggle('border-white/20', match);
+      b.classList.toggle('bg-white/5', !match);
+      b.classList.toggle('text-white/60', !match);
+      b.classList.toggle('border-white/5', !match);
+    });
+    filterByCategoryTab(category);
+  }
+
+  function quickSearchCatalog(term) {
+    document.getElementById('query-input').value = term;
+    updateLiveTelemetryPreview();
+    applyFilterConsole(false);
+  }
+
+  // 1. Cosmic Dust Particle System
+  (function initStars() {
+    const canvas = document.getElementById('cosmic-dust');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const stars = Array.from({ length: 110 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 1.3 + 0.3,
+      alpha: Math.random() * 0.7 + 0.2,
+      twinkleRate: Math.random() * 0.02 + 0.005
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      for (const star of stars) {
+        star.alpha += Math.sin(Date.now() * star.twinkleRate) * 0.008;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.1, Math.min(0.85, star.alpha))})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+  })();
+
+  // 2. Navigation Active State & ScrollSpy
+  (function initNavScroll() {
+    const navItems = document.querySelectorAll('.nav-link-item');
+    const sections = ['hero', 'discoveries', 'about'].map(id => document.getElementById(id));
+
+    function setActiveNav(targetId) {
+      navItems.forEach(el => {
+        const isMatch = el.getAttribute('data-target') === targetId;
+        el.classList.toggle('nav-tab-active', isMatch);
+        el.classList.toggle('font-bold', isMatch);
+        el.classList.toggle('text-white', isMatch);
+        el.classList.toggle('text-white/80', !isMatch);
+        el.classList.toggle('font-medium', !isMatch);
+      });
+    }
+
+    navItems.forEach(item => {
+      item.addEventListener('click', function() {
+        setActiveNav(this.getAttribute('data-target'));
+      });
+    });
+
+    window.addEventListener('scroll', () => {
+      const scrollPos = window.scrollY + 260;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const sec = sections[i];
+        if (sec && sec.offsetTop <= scrollPos) {
+          setActiveNav(sec.id);
+          break;
+        }
+      }
+    }, { passive: true });
+  })();
+
+  // 3. Category Filter Tabs Event Listeners
+  (function initFilterTabs() {
+    const tabButtons = document.querySelectorAll('.filter-tab-btn');
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => {
+          b.classList.remove('active', 'bg-white/15', 'text-white', 'border-white/20');
+          b.classList.add('bg-white/5', 'text-white/60', 'border-white/5');
+        });
+        btn.classList.add('active', 'bg-white/15', 'text-white', 'border-white/20');
+        btn.classList.remove('bg-white/5', 'text-white/60', 'border-white/5');
+
+        filterByCategoryTab(btn.getAttribute('data-filter'));
+      });
+    });
+  })();
+
+  // 4. Spectrum Modal
+  function openSpectrumModalById(planetId) {
+    const planet = PLANETS_DB.find(p => p.id === planetId);
+    if (!planet) return;
+    currentModalPlanet = planet;
+
+    document.getElementById('modal-planet-name').innerText = planet.name;
+    document.getElementById('modal-planet-type').innerText = `${planet.classLabel} • ${planet.badge}`;
+    document.getElementById('modal-dist').innerText = planet.distance;
+    document.getElementById('modal-temp').innerText = planet.tempLabel;
+    document.getElementById('modal-star-method').innerText = `${planet.starInfo} • ${planet.methodLabel}`;
+    document.getElementById('modal-elements').innerText = planet.elements;
+    document.getElementById('modal-esi').innerText = planet.esiLabel;
+
+    const barsContainer = document.getElementById('modal-spectrum-bars');
+    barsContainer.innerHTML = planet.spectrumLines.map(widthPx => `
+      <span style="width:${widthPx}px" class="h-full bg-black/85 blur-[0.4px] rounded-xs"></span>
+    `).join('');
+
+    const modal = document.getElementById('spectrum-modal');
+    const container = document.getElementById('spectrum-container');
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    container.classList.remove('scale-95');
+    container.classList.add('scale-100');
+  }
+
+  function closeSpectrumModal() {
+    const modal = document.getElementById('spectrum-modal');
+    const container = document.getElementById('spectrum-container');
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    container.classList.add('scale-95');
+    container.classList.remove('scale-100');
+  }
+
+  document.getElementById('spectrum-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'spectrum-modal') closeSpectrumModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSpectrumModal();
+  });
+
+  // Real CSV Telemetry Download
+  function downloadDataset() {
+    if (!currentModalPlanet) return;
+    const p = currentModalPlanet;
+    const csvRows = [
+      ['Parameter', 'Value'],
+      ['Planet_Name', p.name],
+      ['Classification', p.classLabel],
+      ['Distance', p.distance],
+      ['Surface_Temp', p.tempLabel],
+      ['Host_Star', p.starInfo],
+      ['Detection_Method', p.methodLabel],
+      ['Atmosphere_Composition', `"${p.elements}"`],
+      ['ESI_Index', p.esiLabel],
+      ['Export_UTC', new Date().toISOString()]
+    ];
+    const csvContent = '﻿' + csvRows.map(r => r.join(',')).join('
+');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${p.id}_telemetry_spectrum.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    showToast(`✓ Файл ${p.id}_telemetry_spectrum.csv загружен`);
+  }
+
+  // Interactive Method Cards Accordion
+  function toggleMethodCard(cardEl) {
+    const extra = cardEl.querySelector('.method-extra');
+    if (extra) {
+      extra.classList.toggle('hidden');
+    }
+  }
+
+  // 5. Toast Notification System
+  let toastTimeout = null;
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-message');
+    toastMsg.innerText = msg;
+    toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+    toast.classList.add('translate-y-0', 'opacity-100');
+
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+      toast.classList.remove('translate-y-0', 'opacity-100');
+    }, 3800);
+  }
+
+  // 6. Forms
+  function submitResearchForm() {
+    const name = document.getElementById('res-name').value.trim();
+    const ticketId = 'PL-' + Math.floor(100000 + Math.random() * 900000);
+    showToast(`✓ Заявка ${ticketId} (${name}) принята научным комитетом!`);
+    document.getElementById('research-request-form').reset();
+  }
+
+  const subscribedEmails = new Set();
+  function submitSubscribeForm() {
+    const email = document.getElementById('sub-email').value.trim().toLowerCase();
+    if (subscribedEmails.has(email)) {
+      showToast(`Адрес ${email} уже подписан на дайджест Planetum`);
+      return;
+    }
+    subscribedEmails.add(email);
+    showToast(`✓ Адрес ${email} добавлен в рассылку открытий!`);
+    document.getElementById('subscribe-form').reset();
+  }
+
+  // 7. Live Star Date Clock in UTC
+  (function initStarClock() {
+    const clockEl = document.getElementById('star-clock');
+    if (!clockEl) return;
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getUTCHours()).padStart(2, '0');
+      const m = String(now.getUTCMinutes()).padStart(2, '0');
+      const s = String(now.getUTCSeconds()).padStart(2, '0');
+      clockEl.innerText = `${h}:${m}:${s} Z`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+  })();
+
+  // Initial Render
+  renderPlanetCards(PLANETS_DB);
+  updateLiveTelemetryPreview();
+</script>
+</body>
+</html>
